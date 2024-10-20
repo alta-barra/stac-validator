@@ -6,8 +6,17 @@ defmodule StacValidator.MixProject do
       app: :stac_validator,
       version: "0.1.0",
       elixir: "~> 1.17",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      description: description(),
+      package: package(),
+      deps: deps(),
+      name: "StacValidator",
+      source_url: "https://github.com/alta-barra/stac_validator",
+      docs: [
+        main: "StacValidator",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -21,7 +30,26 @@ defmodule StacValidator.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.4"}
+      {:ex_json_schema, "~> 0.10.2"},
+      {:jason, "~> 1.4"},
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:httpoison, "~> 2.0"}
+    ]
+  end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
+  defp description() do
+    "A library for validating SpatioTemporal Asset Catalog (STAC) metadata"
+  end
+
+  defp package() do
+    [
+      name: "stac_validator",
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/alta-barra/stac_validator"}
     ]
   end
 end
