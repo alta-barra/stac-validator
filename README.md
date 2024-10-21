@@ -28,9 +28,9 @@ item = %{
   "assets" => %{}
 }
 
-case StacValidator.validate_item(item) do
+case StacValidator.validate(item) do
   {:ok, true} -> IO.puts("Valid STAC item!")
-  {:error, reason} -> IO.puts("Invalid STAC item: #{reason}")
+  {:error, reason} -> IO.puts("Invalid STAC object: #{reason}")
 end
 ```
 

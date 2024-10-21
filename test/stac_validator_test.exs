@@ -24,7 +24,11 @@ defmodule StacValidatorTest do
 
       for invalid_item <- invalid_items do
         {:error, reason} = StacValidator.validate(invalid_item)
-        assert String.starts_with?(reason, "Invalid STAC Item: missing required field")
+
+        assert String.match?(
+                 reason,
+                 ~r/Invalid STAC \w+: (missing required|Expected all of the schemata to match)/
+               )
       end
     end
 
@@ -212,7 +216,7 @@ defmodule StacValidatorTest do
 
       for invalid_collection <- invalid_collections do
         {:error, reason} = StacValidator.validate(invalid_collection)
-        assert String.starts_with?(reason, "Invalid STAC Collection: missing required field")
+        assert String.match?(reason, ~r/Invalid STAC \w+: missing required/)
       end
     end
 
