@@ -6,13 +6,14 @@ defmodule StacValidator.MixProject do
       app: :stac_validator,
       version: "0.1.0",
       elixir: "~> 1.17",
+      organization: "alta-barra",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
       name: "StacValidator",
-      source_url: "https://github.com/alta-barra/stac_validator",
+      source_url: "https://github.com/alta-barra/stac-validator",
       docs: [
         main: "StacValidator",
         extras: ["README.md"]
@@ -35,7 +36,8 @@ defmodule StacValidator.MixProject do
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:httpoison, "~> 2.0"},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:memoize, "~> 1.4", only: [:dev, :test]}
     ]
   end
 
@@ -50,7 +52,7 @@ defmodule StacValidator.MixProject do
     [
       name: "stac_validator",
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/alta-barra/stac_validator"}
+      links: %{"GitHub" => "https://github.com/alta-barra/stac-validator"}
     ]
   end
 end

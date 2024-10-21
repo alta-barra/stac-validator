@@ -5,7 +5,6 @@ A library for validating SpatioTemporal Asset Catalog (STAC) metadata.
 ## Installation
 
 The package can be installed by adding `stac_validator` to your list of dependencies in `mix.exs`:
-
 ```elixir
 def deps do
   [

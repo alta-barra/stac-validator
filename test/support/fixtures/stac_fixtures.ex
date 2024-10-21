@@ -97,4 +97,87 @@ defmodule StacValidator.StacFixtures do
     ])
     |> put_in(["properties", "eo:cloud_cover"], Keyword.get(opts, :cloud_cover, 90))
   end
+
+  def valid_collection() do
+    %{
+      "type" => "Collection",
+      "stac_version" => "1.1.0",
+      "stac_extensions" => [],
+      "id" => "sentinel-2",
+      "title" => "Sentinel-2 MSI: MultiSpectral Instrument, Level-1C",
+      "description" =>
+        "Sentinel-2 is a wide-swath, high-resolution, multi-spectral\nimaging mission supporting Copernicus Land Monitoring studies,\nincluding the monitoring of vegetation, soil and water cover,\nas well as observation of inland waterways and coastal areas.\n\nThe Sentinel-2 data contain 13 UINT16 spectral bands representing\nTOA reflectance scaled by 10000. See the [Sentinel-2 User Handbook](https://sentinel.esa.int/documents/247904/685211/Sentinel-2_User_Handbook)\nfor details. In addition, three QA bands are present where one\n(QA60) is a bitmask band with cloud mask information. For more\ndetails, [see the full explanation of how cloud masks are computed.](https://sentinel.esa.int/web/sentinel/technical-guides/sentinel-2-msi/level-1c/cloud-masks)\n\nEach Sentinel-2 product (zip archive) may contain multiple\ngranules. Each granule becomes a separate Earth Engine asset.\nEE asset ids for Sentinel-2 assets have the following format:\nCOPERNICUS/S2/20151128T002653_20151128T102149_T56MNN. Here the\nfirst numeric part represents the sensing date and time, the\nsecond numeric part represents the product generation date and\ntime, and the final 6-character string is a unique granule identifier\nindicating its UTM grid reference (see [MGRS](https://en.wikipedia.org/wiki/Military_Grid_Reference_System)).\n\nFor more details on Sentinel-2 radiometric resoltuon, [see this page](https://earth.esa.int/web/sentinel/user-guides/sentinel-2-msi/resolutions/radiometric).\n",
+      "license" => "other",
+      "keywords" => [
+        "copernicus",
+        "esa",
+        "eu",
+        "msi",
+        "radiance",
+        "sentinel"
+      ],
+      "providers" => [
+        %{
+          "name" => "European Union/ESA/Copernicus",
+          "roles" => [
+            "producer",
+            "licensor"
+          ],
+          "url" => "https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi"
+        }
+      ],
+      "extent" => %{
+        "spatial" => %{
+          "bbox" => [
+            [
+              -180,
+              -56,
+              180,
+              83
+            ]
+          ]
+        },
+        "temporal" => %{
+          "interval" => [
+            [
+              "2015-06-23T00:00:00Z",
+              nil
+            ]
+          ]
+        }
+      },
+      "assets" => %{
+        "metadata_iso_19139" => %{
+          "roles" => [
+            "metadata",
+            "iso-19139"
+          ],
+          "href" =>
+            "https://storage.googleapis.com/open-cogs/stac-examples/sentinel-2-iso-19139.xml",
+          "title" => "ISO 19139 metadata",
+          "type" => "application/vnd.iso.19139+xml"
+        }
+      },
+      "links" => [
+        %{
+          "rel" => "parent",
+          "href" => "../catalog.json",
+          "type" => "application/json",
+          "title" => "Example Catalog"
+        },
+        %{
+          "rel" => "root",
+          "href" => "../catalog.json",
+          "type" => "application/json",
+          "title" => "Example Catalog"
+        },
+        %{
+          "rel" => "license",
+          "href" =>
+            "https://scihub.copernicus.eu/twiki/pub/SciHubWebPortal/TermsConditions/Sentinel_Data_Terms_and_Conditions.pdf",
+          "title" => "Legal notice on the use of Copernicus Sentinel Data and Service Information"
+        }
+      ]
+    }
+  end
 end

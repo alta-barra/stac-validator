@@ -24,6 +24,7 @@ defmodule StacValidator do
       "links" => [],
       "assets" => %{}
      })
+
      {:ok, true}
 
   """
@@ -71,7 +72,7 @@ defmodule StacValidator do
     end
   end
 
-  def load_remote_schema(schema_type, version) do
+  defp load_remote_schema(schema_type, version) do
     case HTTPoison.get(stac_schema_url(schema_type, version)) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         {:ok, Jason.decode!(body)}

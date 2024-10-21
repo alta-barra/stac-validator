@@ -4,7 +4,7 @@ defmodule StacValidatorTest do
 
   import StacValidator.StacFixtures
 
-  describe "validate/2" do
+  describe "validate/2 for items" do
     setup do
       valid_item = valid_item()
       {:ok, valid_item: valid_item}
@@ -24,7 +24,7 @@ defmodule StacValidatorTest do
 
       for invalid_item <- invalid_items do
         {:error, reason} = StacValidator.validate(invalid_item)
-        assert String.starts_with?(reason, "Invalid STAC Item: missing required")
+        assert String.starts_with?(reason, "Invalid STAC Item: missing required field")
       end
     end
 
@@ -190,6 +190,48 @@ defmodule StacValidatorTest do
 
       # Reset config
       Application.put_env(:stac_validator, :schema_source, original_source)
+    end
+  end
+
+  describe "validate/2 for collections" do
+    setup do
+      valid_collection = valid_collection()
+      {:ok, valid_collection: valid_collection}
+    end
+
+    test "validates a valid STAC collection", %{valid_collection: collection} do
+      assert {:ok, true} = StacValidator.validate(collection)
+    end
+
+    test "fails on missing required fields" do
+      invalid_collections = [
+        %{},
+        %{"type" => "Collection"},
+        %{"type" => "Collection", "stac_version" => "1.0.0"}
+      ]
+
+      for invalid_collection <- invalid_collections do
+        {:error, reason} = StacValidator.validate(invalid_collection)
+        assert String.starts_with?(reason, "Invalid STAC Collection: missing required field")
+      end
+    end
+
+    test "validates collection type", %{valid_collection: collection} do
+      invalid_collection = %{collection | "type" => "NotFeature"}
+      assert {:error, _} = StacValidator.validate(invalid_collection)
+    end
+
+    test "validates stac version format", %{valid_collection: collection} do
+      invalid_versions = [
+        %{collection | "stac_version" => "invalid"},
+        %{collection | "stac_version" => "1"},
+        %{collection | "stac_version" => "1.0"},
+        %{collection | "stac_version" => "v1.0.0"}
+      ]
+
+      for invalid_collection <- invalid_versions do
+        assert {:error, _} = StacValidator.validate(invalid_collection)
+      end
     end
   end
 end
