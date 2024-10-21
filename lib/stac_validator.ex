@@ -9,11 +9,11 @@ defmodule StacValidator do
   @stac_schema_url "https://schemas.stacspec.org/v"
 
   @doc """
-  Validates a STAC item against the STAC specification.
+  Validates a STAC item, collection, or catalog against the STAC specification.
 
   ## Examples
 
-      iex...> StacValidator.validate_item(%{
+      iex...> StacValidator.validate(%{
       "type" => "Feature",
       "stac_version" => "1.0.0",
       "id" => "example-item",
@@ -27,9 +27,13 @@ defmodule StacValidator do
      {:ok, true}
 
   """
-  @spec validate_item(map()) :: {:ok, boolean()} | {:error, String.t()}
-  def validate_item(item, opts \\ []) do
-    with {:ok, schema} <- load_schema("item", opts),
+  @spec validate(map()) :: {:ok, boolean()} | {:error, String.t()}
+  def validate(item, opts \\ [])
+
+  def validate(%{"type" => "Feature"} = item, opts) do
+    version = item["stac_version"] || opts[:stac_version] || @stac_version
+
+    with {:ok, schema} <- load_schema("item", version),
          :ok <- validate_required_fields(item),
          :ok <- validate_against_schema(item, schema),
          :ok <- validate_extensions(item, opts[:extensions] || []),
@@ -39,6 +43,8 @@ defmodule StacValidator do
       {:error, reason} -> {:error, "Invalid STAC Item: #{reason}"}
     end
   end
+
+  def validate(_unknown, _opts), do: {:error, "Invalid STAC Item: missing required field [type]"}
 
   # Private functions
 
@@ -58,19 +64,21 @@ defmodule StacValidator do
     end
   end
 
-  defp load_schema(schema_type, opts) do
-    case Keyword.get(opts, :schema_source, :local) do
-      :local -> load_local_schema(schema_type, opts[:version])
-      :remote -> load_remote_schema(schema_type, opts[:version])
+  defp load_schema(schema_type, schema_version, opts \\ []) do
+    case Keyword.get(opts, :schema_source, :remote) do
+      :local -> load_local_schema(schema_type, schema_version)
+      :remote -> load_remote_schema(schema_type, schema_version)
     end
   end
 
   def load_remote_schema(schema_type, version) do
-    version = version || Application.get_env(:stac_validator, :stac_version, @stac_version)
-
-    case HTTPoison.get(stac_schema_url(schema_type, version) |> IO.inspect()) do
+    case HTTPoison.get(stac_schema_url(schema_type, version)) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         {:ok, Jason.decode!(body)}
+
+      {:ok, _} ->
+        {:error,
+         "Could not locate schema for the STAC type and version combination, #{schema_type} v#{version}"}
 
       {:error, %HTTPoison.Error{reason: reason}} ->
         {:error, reason}
@@ -82,8 +90,6 @@ defmodule StacValidator do
   end
 
   defp load_local_schema(schema_type, version) do
-    version = version || Application.get_env(:stac_validator, :stac_version, @stac_version)
-
     schema_path =
       Path.join([
         :code.priv_dir(:stac_validator),

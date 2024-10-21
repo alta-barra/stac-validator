@@ -1,4 +1,4 @@
-defmodule StacValidator.StacItemFixtures do
+defmodule StacValidator.StacFixtures do
   @moduledoc """
   This module defines test helpers for creating STAC Items.
   """
@@ -83,5 +83,18 @@ defmodule StacValidator.StacItemFixtures do
       "type" => "Feature",
       "stac_version" => "1.1.0"
     }
+  end
+
+  def add_stac_extension(item, "eo", opts \\ []) do
+    item
+    |> put_in(["stac_extensions"], ["https://stac-extensions.github.io/eo/v2.0.0/schema.json"])
+    |> put_in(["properties", "eo:bands"], [
+      %{
+        "name" => "B1",
+        "eo:common_name" => "blue",
+        "eo:center_wavelength" => 0.47
+      }
+    ])
+    |> put_in(["properties", "eo:cloud_cover"], Keyword.get(opts, :cloud_cover, 90))
   end
 end

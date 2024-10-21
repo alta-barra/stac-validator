@@ -34,7 +34,8 @@ defmodule StacValidator.MixProject do
       {:jason, "~> 1.4"},
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:httpoison, "~> 2.0"}
+      {:httpoison, "~> 2.0"},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
