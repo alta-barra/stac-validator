@@ -45,7 +45,7 @@ jobs:
         run: mix deps.get
 
       - name: Run Credo
-        run: mix credo
+        run: mix credo --strict
 
   format:
     runs-on: ubuntu-latest

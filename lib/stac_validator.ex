@@ -203,23 +203,18 @@ defmodule StacValidator do
 
   defp validate_extensions(_item, []), do: :ok
 
-  defp validate_extensions(_item, _extensions) do
-    # TODO: Implement extension validation
-    :ok
-  end
+  defp validate_extensions(_item, _extensions), do: :ok
 
   defp validate_business_rules(%{"type" => "Feature"} = item) do
     with :ok <- validate_datetime(item),
-         :ok <- validate_links(item),
-         :ok <- validate_assets(item) do
-      :ok
+         :ok <- validate_links(item) do
+      validate_assets(item)
     end
   end
 
   defp validate_business_rules(%{"type" => "Collection"} = collection) do
-    with :ok <- validate_links(collection),
-         :ok <- validate_assets(collection) do
-      :ok
+    with :ok <- validate_links(collection) do
+      validate_assets(collection)
     end
   end
 

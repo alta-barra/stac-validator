@@ -98,7 +98,7 @@ defmodule StacValidator.StacFixtures do
     |> put_in(["properties", "eo:cloud_cover"], Keyword.get(opts, :cloud_cover, 90))
   end
 
-  def valid_collection() do
+  def valid_collection do
     %{
       "type" => "Collection",
       "stac_version" => "1.1.0",
