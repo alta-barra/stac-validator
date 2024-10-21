@@ -50,7 +50,7 @@ defmodule StacValidator.MixProject do
   defp package() do
     [
       name: "stac_validator",
-      licenses: ["MIT"],
+      licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/alta-barra/stac-validator"}
     ]
   end
