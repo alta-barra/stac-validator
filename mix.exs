@@ -6,7 +6,6 @@ defmodule StacValidator.MixProject do
       app: :stac_validator,
       version: "0.1.1",
       elixir: "~> 1.17",
-      organization: "alta-barra",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),

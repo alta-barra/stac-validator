@@ -8,7 +8,7 @@ The package can be installed by adding `stac_validator` to your list of dependen
 ```elixir
 def deps do
   [
-    {:stac_validator, "~> 0.1.0"}
+    {:stac_validator, "~> 0.1.1"}
   ]
 end
 ```
