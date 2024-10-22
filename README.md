@@ -34,4 +34,7 @@ case StacValidator.validate(item) do
 end
 ```
 
+## License
+This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.
+
 The documentation can be found at [https://hexdocs.pm/stac_validator](https://hexdocs.pm/stac_validator)
